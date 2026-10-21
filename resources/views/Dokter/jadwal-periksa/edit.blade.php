@@ -1,0 +1,52 @@
+<x-layouts.app title="Edit Jadwal Periksa">
+    <div class="flex items-center gap-3 mb-6">
+        <a href="{{ route('jadwal-periksa.index') }}" class="flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 transition">
+            <i class="fas fa-arrow-left text-xs"></i>
+        </a>
+        <h2 class="text-xl font-bold text-slate-800">Edit Jadwal Periksa</h2>
+    </div>
+
+    <div class="card bg-base-100 shadow-md rounded-2xl border border-slate-200">
+        <div class="card-body p-7">
+            <form action="{{ route('jadwal-periksa.update', $jadwal->id) }}" method="POST">
+                @csrf @method('PUT')
+                <div class="form-control mb-5">
+                    <label class="label pb-1"><span class="text-sm font-semibold text-gray-700">Hari <span class="text-red-500">*</span></span></label>
+                    <select name="hari" class="select select-bordered w-full rounded-lg @error('hari') select-error @enderror" required>
+                        @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $hari)
+                            <option value="{{ $hari }}" {{ old('hari', $jadwal->hari) == $hari ? 'selected' : '' }}>{{ $hari }}</option>
+                        @endforeach
+                    </select>
+                    @error('hari') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-5">
+                    <div class="form-control">
+                        <label class="label pb-1"><span class="text-sm font-semibold text-gray-700">Jam Mulai <span class="text-red-500">*</span></span></label>
+                        <input type="time" name="jam_mulai" value="{{ old('jam_mulai', \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i')) }}" class="input input-bordered w-full rounded-lg @error('jam_mulai') input-error @enderror" required>
+                        @error('jam_mulai') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="form-control">
+                        <label class="label pb-1"><span class="text-sm font-semibold text-gray-700">Jam Selesai <span class="text-red-500">*</span></span></label>
+                        <input type="time" name="jam_selesai" value="{{ old('jam_selesai', \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i')) }}" class="input input-bordered w-full rounded-lg @error('jam_selesai') input-error @enderror" required>
+                        @error('jam_selesai') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div class="form-control mb-6">
+                    <label class="label pb-1"><span class="text-sm font-semibold text-gray-700">Status <span class="text-red-500">*</span></span></label>
+                    <select name="status" class="select select-bordered w-full rounded-lg @error('status') select-error @enderror" required>
+                        <option value="Aktif" {{ old('status', $jadwal->status) == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                        <option value="Tidak Aktif" {{ old('status', $jadwal->status) == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                    </select>
+                    @error('status') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit" class="btn bg-[#2d4499] hover:bg-[#1e2d6b] text-white rounded-lg px-6"><i class="fas fa-save"></i> Update</button>
+                    <a href="{{ route('jadwal-periksa.index') }}" class="btn bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg px-6">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</x-layouts.app>
